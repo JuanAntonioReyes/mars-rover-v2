@@ -99,7 +99,18 @@ console.log("moveBackward was called");
   console.log("The rover position is now: x-" + rover.x + ", y-" + rover.y);  
 }
 function moveByCommands(rover, commands) {
+  var i=0; 
+
+  while (i < commands.length){
+    if (commands.charAt(i) != "f" && commands.charAt(i) !="r" && commands.charAt(i) !="l"  && commands.charAt(i) !="b"){
+      console.log(" El carácter " + commands.charAt(i) + " No es valido ");
+    }
+  i++;
+  }
+
 	for (var i = 0; i < commands.length; i++) {
+ 
+
 		if (commands.charAt(i) === "f") {
 
 			moveForward(rover);
@@ -111,7 +122,12 @@ function moveByCommands(rover, commands) {
 		} else if (commands.charAt(i) === "l") {
 
 			turnLeft(rover);
+    
+		}else if (commands.charAt(i) ==="b"){
 
-		}
+      moveBackward(rover);
+    }
+    
+    
 	}
 }
