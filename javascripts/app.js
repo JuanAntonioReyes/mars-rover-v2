@@ -4,9 +4,9 @@ var rover = {
 	x : 0,
 	y : 0,
 	travelLog : [],
-  grid: [[0,0,1,0,0,0,0,0,0,0],
+  grid: [[0,0,0,1,0,0,0,0,0,0],
          [0,0,0,0,0,0,0,0,0,0],
-         [0,0,0,0,0,0,0,0,0,0],
+         [0,0,0,1,0,0,0,0,0,0],
          [0,0,0,0,0,0,0,0,0,0],
          [0,0,0,0,0,0,0,0,0,0],
          [0,0,0,0,0,0,0,0,0,0],
@@ -55,6 +55,56 @@ function turnRight(rover){
   }
   console.log("The rover direction is now: " + rover.direction);
 }
+function isInBorder (rover){
+  var inBorder= false;
+if (rover.direction === "N" && rover.y <= 0) {
+
+      inBorder=true;
+
+  } else if (rover.direction === "W" && rover.x <= 0) {
+
+    inBorder=true;
+
+  } else if (rover.direction === "S" && rover.y >= 9 ) {
+
+    inBorder=true;
+
+  } else if (rover.direction === "E" && rover.x >= 9 ) {
+
+    inBorder=true;
+
+  }
+  if (inBorder===true){
+    console.log("rover is in the limit and cannot move");
+  }
+return inBorder;
+}
+function findObstacle (rover){
+  var obstacle= false;
+if (rover.direction === "N" && rover.grid[rover.y - 1][rover.x] != 0) {
+
+    obstacle=true;
+
+  } else if (rover.direction === "W" && rover.grid[rover.y][rover.x - 1] != 0 ) {
+
+    obstacle=true;
+
+  } else if (rover.direction === "S" && rover.grid[rover.y + 1][rover.x] != 0 ) {
+
+    obstacle=true;
+
+  } else if (rover.direction === "E" && rover.grid[rover.y][rover.x + 1] != 0) {
+
+    obstacle=true;
+
+  }
+  if (obstacle===true){
+    console.log("rover has found an obstacle and cannot move");
+  }
+return obstacle;
+}
+
+
 
 function moveForward(rover){
   console.log("moveForward was called");
@@ -74,33 +124,31 @@ function moveForward(rover){
   		break;
   }*/
   
-  if (rover.direction === "N" && rover.y > 0 &&
-      rover.grid[rover.y - 1][rover.x] === 0) {
+  if (rover.direction === "N" && isInBorder(rover)===false &&
+      findObstacle(rover)===false) {
 
       rover.travelLog.push([rover.x, rover.y]);
       rover.y = rover.y - 1;
 
-  } else if (rover.direction === "W" && rover.x > 0 &&
-             rover.grid[rover.y][rover.x - 1] === 0) {
+  } else if (rover.direction === "W" && isInBorder(rover)===false && 
+    findObstacle(rover)===false) {
 
   	rover.travelLog.push([rover.x, rover.y]);
     rover.x = rover.x - 1;
 
-  } else if (rover.direction === "S" && rover.y < 9 &&
-             rover.grid[rover.y + 1][rover.x] === 0) {
+  } else if (rover.direction === "S" && isInBorder(rover)===false &&
+             findObstacle(rover)===false) {
 
   	rover.travelLog.push([rover.x, rover.y]);
     rover.y = rover.y + 1;
 
-  } else if (rover.direction === "E" && rover.x < 9 &&
-             rover.grid[rover.y][rover.x + 1] === 0) {
+  } else if (rover.direction === "E" && isInBorder(rover)===false &&
+             findObstacle(rover)===false) {
 
   	rover.travelLog.push([rover.x, rover.y]);
     rover.x = rover.x + 1;
 
-  } else {
-    console.log("The rover cannot move because is out of boundaries or has encountered an obstacle");
-  }
+  } 
   console.log (rover.travelLog);
   console.log("The rover position is now: x-" + rover.x + ", y-" + rover.y);
 }
