@@ -3,7 +3,17 @@ var rover = {
 	direction : "N",
 	x : 0,
 	y : 0,
-	travelLog : []
+	travelLog : [],
+  grid: [[0,0,1,0,0,0,0,0,0,0],
+         [0,0,0,0,0,0,0,0,0,0],
+         [0,0,0,0,0,0,0,0,0,0],
+         [0,0,0,0,0,0,0,0,0,0],
+         [0,0,0,0,0,0,0,0,0,0],
+         [0,0,0,0,0,0,0,0,0,0],
+         [0,0,0,0,0,0,0,0,0,0],
+         [0,0,0,0,0,0,0,0,0,0],
+         [0,0,0,0,0,0,0,0,0,0],
+         [0,0,0,0,0,0,0,0,0,0]]
 };
 // ======================
 
@@ -64,20 +74,34 @@ function moveForward(rover){
   		break;
   }*/
   
-  if (rover.direction === "N" && rover.y > 0) {
-  	rover.travelLog.push([rover.x, rover.y]);
-    rover.y = rover.y - 1;
-  } else if (rover.direction === "W" && rover.x > 0) {
+  if (rover.direction === "N" && rover.y > 0 &&
+      rover.grid[rover.y - 1][rover.x] === 0) {
+
+      rover.travelLog.push([rover.x, rover.y]);
+      rover.y = rover.y - 1;
+
+  } else if (rover.direction === "W" && rover.x > 0 &&
+             rover.grid[rover.y][rover.x - 1] === 0) {
+
   	rover.travelLog.push([rover.x, rover.y]);
     rover.x = rover.x - 1;
-  } else if (rover.direction === "S" && rover.y < 9) {
+
+  } else if (rover.direction === "S" && rover.y < 9 &&
+             rover.grid[rover.y + 1][rover.x] === 0) {
+
   	rover.travelLog.push([rover.x, rover.y]);
     rover.y = rover.y + 1;
-  } else if (rover.direction === "E" && rover.x < 9) {
+
+  } else if (rover.direction === "E" && rover.x < 9 &&
+             rover.grid[rover.y][rover.x + 1] === 0) {
+
   	rover.travelLog.push([rover.x, rover.y]);
     rover.x = rover.x + 1;
+
+  } else {
+    console.log("The rover cannot move because is out of boundaries or has encountered an obstacle");
   }
-  console.log ( rover.travelLog);
+  console.log (rover.travelLog);
   console.log("The rover position is now: x-" + rover.x + ", y-" + rover.y);
 }
 function moveBackward (rover){
@@ -100,34 +124,35 @@ console.log("moveBackward was called");
 }
 function moveByCommands(rover, commands) {
   var i=0; 
+  var noError = true;
 
-  while (i < commands.length){
+  while (i < commands.length && noError){
     if (commands.charAt(i) != "f" && commands.charAt(i) !="r" && commands.charAt(i) !="l"  && commands.charAt(i) !="b"){
       console.log(" El carácter " + commands.charAt(i) + " No es valido ");
+      noError = false;
     }
-  i++;
+    i++;
   }
 
-	for (var i = 0; i < commands.length; i++) {
- 
+  if (noError){
+  	for (var i = 0; i < commands.length; i++) {
 
-		if (commands.charAt(i) === "f") {
+  		if (commands.charAt(i) === "f") {
 
-			moveForward(rover);
+  			moveForward(rover);
 
-		} else if (commands.charAt(i) === "r") {
+  		} else if (commands.charAt(i) === "r") {
 
-			turnRight(rover);
+  			turnRight(rover);
 
-		} else if (commands.charAt(i) === "l") {
+  		} else if (commands.charAt(i) === "l") {
 
-			turnLeft(rover);
-    
-		}else if (commands.charAt(i) ==="b"){
+  			turnLeft(rover);
+      
+  		}else if (commands.charAt(i) ==="b"){
 
-      moveBackward(rover);
-    }
-    
-    
-	}
+        moveBackward(rover);
+      }
+  	}
+  }
 }
