@@ -97,32 +97,52 @@ function isInBorder (rover, movement){
 
   }
   if (inBorder===true){
-    console.log("rover is in the limit and cannot move");
+    console.log("The rover is in the limit and cannot move");
   }
 return inBorder;
 }
 
-function findObstacle (rover){
+function findObstacle (rover, movement){
   var obstacle= false;
-if (rover.direction === "N" && rover.grid[rover.y - 1][rover.x] != 0) {
+  if (rover.direction === "N" && 
+      (
+        (movement === "f" && rover.grid[rover.y - 1][rover.x] != 0) ||
+        (movement === "b" && rover.grid[rover.y + 1][rover.x] != 0)
+      )
+     ) {
 
     obstacle=true;
 
-  } else if (rover.direction === "W" && rover.grid[rover.y][rover.x - 1] != 0 ) {
+  } else if (rover.direction === "W" && 
+              (
+                (movement === "f" && rover.grid[rover.y][rover.x - 1] != 0) ||
+                (movement === "b" && rover.grid[rover.y][rover.x + 1] != 0)
+              )
+            ) {
 
     obstacle=true;
 
-  } else if (rover.direction === "S" && rover.grid[rover.y + 1][rover.x] != 0 ) {
+  } else if (rover.direction === "S" && 
+              (
+                (movement === "f" && rover.grid[rover.y + 1][rover.x] != 0) ||
+                (movement === "b" && rover.grid[rover.y - 1][rover.x] != 0)
+              )
+            ) {
 
     obstacle=true;
 
-  } else if (rover.direction === "E" && rover.grid[rover.y][rover.x + 1] != 0) {
+  } else if (rover.direction === "E" && 
+              (
+                (movement === "f" && rover.grid[rover.y][rover.x + 1] != 0) ||
+                (movement === "b" && rover.grid[rover.y][rover.x - 1] != 0)
+              )
+            ) {
 
     obstacle=true;
 
   }
   if (obstacle===true){
-    console.log("rover has found an obstacle and cannot move");
+    console.log("The rover has found an obstacle and cannot move");
   }
 return obstacle;
 }
