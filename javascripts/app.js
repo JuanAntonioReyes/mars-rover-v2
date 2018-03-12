@@ -103,11 +103,12 @@ return inBorder;
 }
 
 function findObstacle (rover, movement){
-  var obstacle= false;
+  var obstacle = false;
+
   if (rover.direction === "N" && 
       (
-        (movement === "f" && rover.grid[rover.y - 1][rover.x] != 0) ||
-        (movement === "b" && rover.grid[rover.y + 1][rover.x] != 0)
+        (movement === "f" && rover.y > 0 && rover.grid[rover.y - 1][rover.x] != 0) ||
+        (movement === "b" && rover.y < 9 && rover.grid[rover.y + 1][rover.x] != 0)
       )
      ) {
 
@@ -115,8 +116,8 @@ function findObstacle (rover, movement){
 
   } else if (rover.direction === "W" && 
               (
-                (movement === "f" && rover.grid[rover.y][rover.x - 1] != 0) ||
-                (movement === "b" && rover.grid[rover.y][rover.x + 1] != 0)
+                (movement === "f" && rover.x > 0 && rover.grid[rover.y][rover.x - 1] != 0) ||
+                (movement === "b" && rover.x < 9 && rover.grid[rover.y][rover.x + 1] != 0)
               )
             ) {
 
@@ -124,8 +125,8 @@ function findObstacle (rover, movement){
 
   } else if (rover.direction === "S" && 
               (
-                (movement === "f" && rover.grid[rover.y + 1][rover.x] != 0) ||
-                (movement === "b" && rover.grid[rover.y - 1][rover.x] != 0)
+                (movement === "f" && rover.y < 9 && rover.grid[rover.y + 1][rover.x] != 0) ||
+                (movement === "b" && rover.y > 0 && rover.grid[rover.y - 1][rover.x] != 0)
               )
             ) {
 
@@ -133,8 +134,8 @@ function findObstacle (rover, movement){
 
   } else if (rover.direction === "E" && 
               (
-                (movement === "f" && rover.grid[rover.y][rover.x + 1] != 0) ||
-                (movement === "b" && rover.grid[rover.y][rover.x - 1] != 0)
+                (movement === "f" && rover.x < 9 && rover.grid[rover.y][rover.x + 1] != 0) ||
+                (movement === "b" && rover.x > 0 && rover.grid[rover.y][rover.x - 1] != 0)
               )
             ) {
 
@@ -148,57 +149,70 @@ return obstacle;
 }
 
 
-
 function moveForward(rover){
   console.log("moveForward was called");
+
+  var inBorder = isInBorder(rover,"f");
+  var frontObstacle = findObstacle(rover,"f");
  
-  if (rover.direction === "N" && isInBorder(rover,"f")===false &&
-      findObstacle(rover)===false) {
+  if (rover.direction === "N" && !inBorder && !frontObstacle) {
 
       rover.travelLog.push([rover.x, rover.y]);
       rover.y = rover.y - 1;
 
-  } else if (rover.direction === "W" && isInBorder(rover,"f")===false && 
-    findObstacle(rover)===false) {
+  } else if (rover.direction === "W" && !inBorder && !frontObstacle) {
 
   	rover.travelLog.push([rover.x, rover.y]);
     rover.x = rover.x - 1;
 
-  } else if (rover.direction === "S" && isInBorder(rover,"f")===false &&
-             findObstacle(rover)===false) {
+  } else if (rover.direction === "S" && !inBorder && !frontObstacle) {
 
   	rover.travelLog.push([rover.x, rover.y]);
     rover.y = rover.y + 1;
 
-  } else if (rover.direction === "E" && isInBorder(rover,"f")===false &&
-             findObstacle(rover)===false) {
+  } else if (rover.direction === "E" && !inBorder && !frontObstacle) {
 
   	rover.travelLog.push([rover.x, rover.y]);
     rover.x = rover.x + 1;
 
-  } 
+  }
+
   console.log (rover.travelLog);
   console.log("The rover position is now: x-" + rover.x + ", y-" + rover.y);
 }
 
 function moveBackward (rover){
-console.log("moveBackward was called");
-  if (rover.direction === "N" && isInBorder(rover,"b")===false) {
+  console.log("moveBackward was called");
+
+  var inBorder = isInBorder(rover,"b");
+  var backObstacle = findObstacle(rover,"b");
+
+  if (rover.direction === "N" && !inBorder && !backObstacle) {
+    
     rover.travelLog.push([rover.x, rover.y]);
     rover.y = rover.y + 1;
-  } else if (rover.direction === "W" && isInBorder(rover,"b")===false) {
+
+  } else if (rover.direction === "W" && !inBorder && !backObstacle) {
+    
     rover.travelLog.push([rover.x, rover.y]);
     rover.x = rover.x + 1;
-  } else if (rover.direction === "S" && isInBorder(rover,"b")===false) {
+
+  } else if (rover.direction === "S" && !inBorder && !backObstacle) {
+    
     rover.travelLog.push([rover.x, rover.y]);
     rover.y = rover.y - 1;
-  } else if (rover.direction === "E" && isInBorder(rover,"b")===false) {
+
+  } else if (rover.direction === "E" && !inBorder && !backObstacle) {
+    
     rover.travelLog.push([rover.x, rover.y]);
     rover.x = rover.x - 1;
+
   }
-  console.log ( rover.travelLog);
+
+  console.log (rover.travelLog);
   console.log("The rover position is now: x-" + rover.x + ", y-" + rover.y);  
 }
+
 function moveByCommands(rover, commands) {
   var i=0; 
   var noError = true;
